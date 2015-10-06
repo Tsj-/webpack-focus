@@ -51,10 +51,27 @@ const MSG = `
 console.log(MSG);
 
 import devConfig from './dev-config';
+import baseConfig from './base-config';
 import productionConfig from './production-config';
 import server from './server';
-export default {
-    devConfig,
-    productionConfig,
-    server
+
+const env = process.env.NODE_ENV || 'BASE';
+let config;
+switch(env){
+    case 'PRODUCTION':
+      config = productionConfig;
+      break;
+    case 'BASE':
+      config = baseConfig;
+      break;
+    case 'DEV':
+      config = devConfig;
+      break;
 }
+
+
+//export devConfig;
+//export baseConfig;
+//export productionConfig;
+//export server;
+export default config;

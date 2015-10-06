@@ -10,4 +10,4 @@ const conf = {
     port: 3007
 }
 
-t.devConfig(conf);
+t(conf);

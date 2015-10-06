@@ -7,28 +7,21 @@ import webpack from 'webpack';
 * @return {object}      A json object of the developer configuration.
 */
 function generateConfiguration(spec = {}){
-    console.log('DEV CONF');
+    console.log('DEFAULT CONF');
     spec.plugins = spec.plugins || [];
     spec.loaders = spec.loaders || [];
-    const {devtool, entry, name, directory,exclude, output, loaders, plugins, port, ...otherConf} = spec;
+    const {devtool, entry, name, directory, exclude, output, loaders, plugins, port, ...otherConf} = spec;
 
-    const devConfig =  {
+    const baseConfig =  {
         devtool: devtool || 'eval',
-        entry: [
-            `webpack-dev-server/client?http://localhost:${port}`,
-            'webpack/hot/only-dev-server',
-            ...entry
-        ],
+        entry: entry,
         output: output,
-        plugins: [
-            new webpack.HotModuleReplacementPlugin(),
-            ...plugins
-        ],
+        plugins: plugins,
         module: {
             loaders: [
                 {
                     test: /\.js$/,
-                    loaders: ['react-hot', 'babel'],
+                    loaders: ['babel'],
                     include: directory || path.join(__dirname, 'src'),
                     exclude: exclude || path.join(__dirname, 'node_modules')
                 },
@@ -75,6 +68,6 @@ function generateConfiguration(spec = {}){
         ...otherConf
     }
     //console.log('%j', devConfig.module.loaders);
-    return devConfig;
+    return baseConfig;
 }
 export default generateConfiguration;

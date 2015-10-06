@@ -7,9 +7,10 @@ import webpack from 'webpack';
 * @return {object}      A json object of the developer configuration.
 */
 function generateProductionConfiguration(spec = {}){
+    console.log('PRODUCTION CONF');
     spec.plugins = spec.plugins || [];
     spec.loaders = spec.loaders || [];
-    const {devtool, entry, name, directory, output, plugins, loaders, ...otherConf} = spec;
+    const {devtool, entry, name, exclude, directory, output, plugins, loaders, ...otherConf} = spec;
     return {
         devtool: devtool || 'source-map',
         entry: entry,
@@ -19,12 +20,12 @@ function generateProductionConfiguration(spec = {}){
             new webpack.DefinePlugin({
                 'process.env.NODE_ENV': JSON.stringify('production')
             }),
-            /*new webpack.optimize.UglifyJsPlugin({
+            new webpack.optimize.UglifyJsPlugin({
                 compressor: {
                     'screw_ie8': true,
                     warnings: false
                 }
-            }),*/
+            }),
             ...plugins
         ],
         module: {
@@ -32,7 +33,8 @@ function generateProductionConfiguration(spec = {}){
                 {
                     test: /\.js$/,
                     loaders: ['babel'],
-                    include: directory || path.join(__dirname, 'src')
+                    include: directory || path.join(__dirname, 'src'),
+                    exclude: exclude || path.join(__dirname, 'node_modules')
                 },
                 {
                     test: /\.json$/,
